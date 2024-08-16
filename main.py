@@ -1,52 +1,91 @@
 
-# Задача: Создай класс Task, который позволяет управлять задачами (делами).
-# У задачи должны быть атрибуты:
-# описание задачи,
-# срок выполнения и статус (выполнено/не выполнено).
-# Реализуй функцию для добавления задач, отметки выполненных задач,
-# вывода списка текущих (не выполненных) задач.
+# 1. Создай класс `Store`:
+# -Атрибуты класса:
+# - `name`: название магазина.
+# - `address`: адрес магазина.
+# - `items`: словарь, где ключ - название товара, а значение - его цена. Например, `{'apples': 0.5, 'bananas': 0.75}`.
+# - Методы класса:
+# - `__init__ - конструктор, который инициализирует название и адрес, а также пустой словарь для `items`.
+# -  метод для добавления товара в ассортимент.
+# - метод для удаления товара из ассортимента.
+# - метод для получения цены товара по его названию. Если товар отсутствует, возвращайте `None`.
+# - метод для обновления цены товара.
+#
+# 2. Создай несколько объектов класса `Store`:
+# Создай не менее трех различных магазинов с разными названиями, адресами и добавь в каждый из них несколько товаров.
+# 3. Протестировать методы:
+# Выбери один из созданных магазинов и протестируй все его методы: добавь товар, обнови цену, убери товар и запрашивай цену.
 
-class Task:
-    def __init__(self, description, due_date):
-        self.description = description
-        self.due_date = due_date
-        self.is_completed = False
-
-    def mark_as_completed(self):
-        self.is_completed = True
 
 
-class TaskManager:
-    def __init__(self):
-        self.tasks_list = []
+class Store:
+    def __init__(self, name_store, address_store):
+        self.name_store = name_store
+        self.address_store = address_store
+        self.items = {}
 
-    def add_task (self, description, due_date):
-        new_task = Task (description, due_date)
-        self.tasks_list.append (new_task)
+    def add_item (self, item_name, item_price):
+        self.items [item_name] = item_price
 
-    def completed_task (self, task_index):
-        if 0 <= task_index < len (self.tasks_list):
-            self.tasks_list [task_index].mark_as_completed()
+    def add_new_item (self, item_name, item_price):
+        self.items [item_name] = item_price
+        print(f"Внимание, новинка! Товар {item_name} появился в магазине {self.name_store} по цене {item_price} руб.")
+        print("")
+
+    def del_item (self, item_name):
+        if item_name in self.items:
+            del self.items[item_name]
+            print(f"Товар {item_name} выведен из ассортимента магазина {self.name_store}.")
+            print("")
         else:
-            print ("Задача с таким индексом не найдена!")
+            print (f"Товар {item_name} не найден в магазине {self.name_store}.")
 
-    def show_current_tasks (self):
-        print("Текущие задачи:")
-        for index, task in enumerate (self.tasks_list):
-            if not task.is_completed:
-                print(f"Задача {index+1}. {task.description}, cрок {task.due_date}.")
+    def price_item(self, item_name):
+        if item_name in self.items:
+            print (f"Цена на товар {item_name} равна {self.items[item_name]} рублей.")
+        else:
+            print (f"Товар {item_name} не найден в магазине {self.name_store}.")
+            print ("None")
 
-task_manager = TaskManager()
+    def new_price_item(self, item_name, new_price):
+        if item_name in self.items:
+            self.items[item_name] = new_price
+            print (f"Цена на товар {item_name} изменилась, теперь она равна {self.items[item_name]} рублей.")
+        else:
+            print (f"Товар {item_name} не найден в магазине {self.name_store}.")
 
-task_manager.add_task("Изучить урок 1","2024.08.19")
-task_manager.add_task("Изучить урок 2","2024.08.20")
-task_manager.add_task("Изучить урок 3","2024.08.21")
-task_manager.add_task("Изучить урок 4","2024.08.22")
-task_manager.add_task("Изучить урок 5","2024.08.23")
+    def show_store_items (self):
+        print (f"Магазин {self.name_store}, по адресу {self.address_store}.")
+        print("В наличии следующий товар: ")
+        for k, v in self.items.items():
+            print (f"{k} по цене : {v} руб.")
+        print("")
 
-task_manager.show_current_tasks()
 
-num_completed_task = int(input ("Введите номер выполненной задачи :"))
-task_manager.completed_task(num_completed_task - 1)
+store_1 = Store("<ГАСТРОНОМ_1>", "Прохладная д.5")
+store_2 = Store("<УНИВЕРСАМ_2>", "Южная д.19")
+store_3 = Store("<ХЛЕБНЫЙ_3>", "Северная д.25")
 
-task_manager.show_current_tasks()
+store_1.add_item("Пряник", 50.00)
+store_1.add_item("Газировка", 20.00)
+store_1.add_item("Молоко", 15.00)
+
+store_2.add_item("Пряник", 50.00)
+store_2.add_item("Пельмени", 30.00)
+store_2.add_item("Шоколад", 30.00)
+
+store_3.add_item("Пельмени", 30.00)
+store_3.add_item("Шоколад", 30.00)
+store_3.add_item("Молоко", 15.00)
+
+store_1.show_store_items()
+
+store_3.show_store_items()
+
+store_3.new_price_item("Шоколад", 100)
+
+store_3.add_new_item("МУКА", 10.00)
+store_3.show_store_items()
+
+store_3.del_item("Пельмени")
+store_3.show_store_items()
